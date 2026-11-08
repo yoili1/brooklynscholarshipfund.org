@@ -48,13 +48,18 @@ a { color: var(--leaf); text-underline-offset: .2em; }
 .eyebrow { font-size: .78rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--leaf); }
 .btn { display: inline-flex; align-items: center; gap: .5rem; font: 600 .95rem/1 var(--sans); text-decoration: none; padding: .9rem 1.3rem; border-radius: 999px; border: 1px solid transparent; cursor: pointer; transition: background .2s, color .2s, transform .2s; }
 .btn:hover { transform: translateY(-1px); }
-.btn-primary { background: var(--clay); color: #fff; }
+.btn-primary { background: var(--clay); color: #fff; box-shadow: 0 8px 20px -10px rgb(181 83 44 / .8); }
 .btn-primary:hover { background: #9C4423; }
 .btn-ghost { background: transparent; color: inherit; border-color: currentColor; }
 
+/* Scroll progress */
+.progress { position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 30; background: linear-gradient(90deg, #9FD2B6, var(--clay)); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); }
+
 /* Header */
-.site-header { position: sticky; top: 0; z-index: 10; background: rgb(22 53 42 / .96); backdrop-filter: saturate(1.4) blur(8px); color: var(--paper); }
-.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; height: 4rem; }
+.site-header { position: fixed; inset: 0 0 auto 0; z-index: 10; color: var(--paper); transition: background .3s, box-shadow .3s; }
+.site-header.solid { background: rgb(22 53 42 / .92); backdrop-filter: saturate(1.4) blur(10px); box-shadow: 0 1px 0 rgb(246 243 236 / .08); }
+.site-header .wrap { transition: height .3s; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; height: 4.5rem; }
+.site-header.solid .wrap { height: 3.75rem; }
 .wordmark { font: 600 1.25rem/1 var(--serif); color: var(--paper); text-decoration: none; letter-spacing: .01em; }
 .site-nav { display: flex; align-items: center; gap: 1.75rem; font-size: .9rem; }
 .site-nav a:not(.btn) { color: rgb(246 243 236 / .8); text-decoration: none; }
@@ -63,8 +68,15 @@ a { color: var(--leaf); text-underline-offset: .2em; }
 
 /* Hero */
 .hero { background: var(--forest); color: var(--paper); position: relative; overflow: hidden; }
-.hero::before { content: ""; position: absolute; inset: auto -20% -55% 35%; height: 120%; background: radial-gradient(closest-side, rgb(47 122 91 / .45), transparent); pointer-events: none; }
-.hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(2.5rem, 5vw, 5rem); align-items: center; padding-block: clamp(3.5rem, 8vw, 6.5rem); }
+.hero::before, .hero::after { content: ""; position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none; }
+.hero::before { width: 46rem; height: 46rem; right: -12rem; bottom: -22rem; background: rgb(47 122 91 / .55); animation: drift 18s ease-in-out infinite alternate; }
+.hero::after { width: 26rem; height: 26rem; left: -8rem; top: -6rem; background: rgb(181 83 44 / .22); animation: drift 22s ease-in-out infinite alternate-reverse; }
+@keyframes drift { to { transform: translate(-6rem, -4rem) scale(1.12); } }
+.rotator { display: inline-grid; vertical-align: bottom; }
+.rotator span { grid-area: 1 / 1; font-style: italic; color: #BFE3CE; opacity: 0; transform: translateY(.35em); transition: opacity .5s, transform .5s; }
+.rotator span.on { opacity: 1; transform: none; }
+.no-js .rotator span:first-child { opacity: 1; transform: none; }
+.hero .wrap { position: relative; padding-top: calc(4rem + clamp(3rem, 7vw, 5.5rem)) !important; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(2.5rem, 5vw, 5rem); align-items: center; padding-block: clamp(3.5rem, 8vw, 6.5rem); }
 .hero .eyebrow { color: #9FD2B6; }
 .hero h1 { font: 500 clamp(2.5rem, 1.4rem + 3.6vw, 4.1rem)/1.03 var(--serif); letter-spacing: -.02em; margin: 1rem 0 1.4rem; text-wrap: balance; }
 .hero h1 em { font-style: italic; color: #BFE3CE; }
@@ -88,6 +100,12 @@ input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; h
 input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 2px solid var(--leaf); box-shadow: 0 2px 6px rgb(0 0 0 / .2); }
 input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 2px solid var(--leaf); }
 .scale { display: flex; justify-content: space-between; font-size: .75rem; color: var(--muted); margin-top: .5rem; }
+.meter { display: grid; grid-template-columns: auto 1fr; gap: 1.1rem; align-items: center; }
+.ring { width: 92px; height: 92px; }
+.ring circle { fill: none; stroke-width: 10; }
+.ring .track { stroke: var(--mint); }
+.ring .bar { stroke: var(--leaf); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset .5s cubic-bezier(.2,.8,.2,1); }
+.ring text { font: 600 17px var(--sans); fill: var(--ink); }
 .result { display: grid; gap: .55rem; padding: 1.1rem 1.2rem; background: var(--paper); border-radius: var(--radius); font-variant-numeric: tabular-nums; }
 .result div { display: flex; justify-content: space-between; gap: 1rem; font-size: .95rem; }
 .result .credit { color: var(--leaf); font-weight: 600; }
@@ -102,7 +120,7 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 .section-head p { color: var(--muted); margin-top: 1rem; font-size: 1.05rem; }
 
 .steps { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; counter-reset: s; }
-.steps li { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.8rem; display: grid; gap: .6rem; align-content: start; transition: transform .25s, box-shadow .25s; }
+.steps li { background: var(--card); border: 1px solid transparent; box-shadow: 0 1px 2px rgb(21 32 27 / .05); border-radius: var(--radius); padding: 1.8rem; display: grid; gap: .6rem; align-content: start; transition: transform .25s, box-shadow .25s; }
 .steps li:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
 .steps li::before { counter-increment: s; content: counter(s); width: 2.4rem; height: 2.4rem; display: grid; place-items: center; border-radius: 50%; background: var(--mint); color: var(--forest); font: 600 1.1rem/1 var(--serif); margin-bottom: .6rem; }
 .steps h3 { font-size: 1.08rem; font-weight: 600; }
@@ -131,7 +149,7 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 
 /* FAQ */
 .faq { max-width: 50rem; display: grid; gap: .75rem; }
-.faq details { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); transition: box-shadow .2s; }
+.faq details { background: var(--card); border: 1px solid transparent; box-shadow: 0 1px 2px rgb(21 32 27 / .05); border-radius: var(--radius); transition: box-shadow .2s; }
 .faq details[open] { box-shadow: var(--shadow); }
 .faq summary { list-style: none; cursor: pointer; padding: 1.2rem 1.4rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
 .faq summary::-webkit-details-marker { display: none; }
@@ -154,7 +172,7 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 .site-footer p { max-width: 62em; }
 .site-footer a { color: #BFE3CE; }
 
-.reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); transition-delay: var(--d, 0s); }
 .reveal.in { opacity: 1; transform: none; }
 .no-js .reveal { opacity: 1; transform: none; }
 
@@ -165,6 +183,8 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
   .facts div:nth-child(3) { border-left: 0; }
   .facts div:nth-child(n+3) { border-top: 1px solid rgb(246 243 236 / .14); }
   .site-nav a:not(.btn) { display: none; }
+  .site-nav .btn { white-space: nowrap; padding: .55rem .9rem; font-size: .85rem; }
+  .wordmark { font-size: 1.05rem; }
 }
 </style>
 <script type="application/ld+json">
@@ -173,6 +193,7 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 </head>
 <body class="no-js">
 <a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
 
 <header class="site-header">
   <div class="wrap">
@@ -192,7 +213,7 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
     <div class="wrap">
       <div>
         <p class="eyebrow">Federal scholarship tax credit · Starts 2027</p>
-        <h1>Your tax dollars, <em>Brooklyn’s</em> scholarships.</h1>
+        <h1>Your tax dollars, turned into <span class="rotator" aria-hidden="true"><span class="on">tuition.</span><span>books.</span><span>tutoring.</span><span>scholarships.</span></span><span class="skip">scholarships.</span></h1>
         <p class="lede">From January 1, 2027, every dollar you give us, up to $1,700 per person, comes straight off your federal income tax. We turn it into tuition help for Brooklyn families.</p>
         <div class="actions">
           <a class="btn btn-primary" href="#calculator">See what you can give</a>
@@ -220,10 +241,13 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
           <input type="range" id="amount" min="100" max="5000" step="50" value="1700">
           <div class="scale"><span>$100</span><span id="cap-label">Credit limit $1,700</span><span>$5,000</span></div>
         </div>
-        <div class="result" aria-live="polite">
+        <div class="meter">
+          <svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle class="track" cx="50" cy="50" r="42"/><circle class="bar" id="ring" cx="50" cy="50" r="42" stroke-dasharray="263.9" stroke-dashoffset="0"/><text x="50" y="56" text-anchor="middle" id="ring-label">100%</text></svg>
+          <div class="result" aria-live="polite">
           <div><span>Your gift</span><span id="r-gift">$1,700</span></div>
           <div class="credit"><span>Federal tax credit</span><span id="r-credit">−$1,700</span></div>
           <div class="total"><span>Your cost</span><span id="r-cost">$0</span></div>
+          </div>
         </div>
         <p class="fine" id="fine">Assumes you owe at least that much federal income tax. Unused credit carries forward up to 5 years.</p>
         <a class="btn btn-primary" id="pledge" href="mailto:donations@brooklynscholarshipfund.org">Pledge this gift</a>
@@ -255,10 +279,10 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
         </li>
       </ol>
       <dl class="facts reveal">
-        <div><dt>$1,700</dt><dd>Credit per person, per year</dd></div>
-        <div><dt>$3,400</dt><dd>For a married couple when each spouse gives</dd></div>
-        <div><dt>100%</dt><dd>Dollar for dollar off what you owe</dd></div>
-        <div><dt>5 years</dt><dd>To use any credit you can’t use right away</dd></div>
+        <div><dt data-count="1700" data-pre="$">$1,700</dt><dd>Credit per person, per year</dd></div>
+        <div><dt data-count="3400" data-pre="$">$3,400</dt><dd>For a married couple when each spouse gives</dd></div>
+        <div><dt data-count="100" data-post="%">100%</dt><dd>Dollar for dollar off what you owe</dd></div>
+        <div><dt data-count="5" data-post=" years">5 years</dt><dd>To use any credit you can’t use right away</dd></div>
       </dl>
     </div>
   </section>
@@ -354,15 +378,30 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
   const range = $('amount');
   let givers = 1;
 
+  const shown = {};
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function tween(id, to, prefix = '') {
+    const el = $(id), from = shown[id] ?? to; shown[id] = to;
+    if (reduce || from === to) { el.textContent = prefix + fmt(to); return; }
+    const t0 = performance.now();
+    (function step(t) {
+      const k = Math.min(1, (t - t0) / 350), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = prefix + fmt(from + (to - from) * e);
+      if (k < 1) requestAnimationFrame(step);
+    })(t0);
+  }
   function update() {
     const gift = +range.value;
     const cap = CAP * givers;
     const credit = Math.min(gift, cap);
     range.style.setProperty('--fill', ((gift - range.min) / (range.max - range.min) * 100) + '%');
     $('amount-out').textContent = fmt(gift);
-    $('r-gift').textContent = fmt(gift);
-    $('r-credit').textContent = '−' + fmt(credit);
-    $('r-cost').textContent = fmt(gift - credit);
+    tween('r-gift', gift);
+    tween('r-credit', credit, '−');
+    tween('r-cost', gift - credit);
+    const pct = Math.round(credit / gift * 100);
+    $('ring').style.strokeDashoffset = 263.9 * (1 - credit / gift);
+    $('ring-label').textContent = pct + '%';
     $('cap-label').textContent = 'Credit limit ' + fmt(cap);
     $('fine').textContent = (givers === 2 ? 'Each spouse gives in their own name, up to $1,700 each. ' : '') +
       (gift > cap ? 'The amount above ' + fmt(cap) + ' can be a regular deductible gift. ' : '') +
@@ -397,8 +436,34 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
   tick();
   $('year').textContent = new Date().getFullYear();
 
+  // Rotating headline word
+  const words = [...document.querySelectorAll('.rotator span')];
+  let wi = 0;
+  if (!reduce) setInterval(() => { words[wi].classList.remove('on'); wi = (wi + 1) % words.length; words[wi].classList.add('on'); }, 2200);
+
+  // Header + scroll progress
+  const header = document.querySelector('.site-header'), bar = document.querySelector('.progress');
+  function onScroll() {
+    header.classList.toggle('solid', scrollY > 20);
+    const max = document.documentElement.scrollHeight - innerHeight;
+    bar.style.setProperty('--p', max > 0 ? scrollY / max : 0);
+  }
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  // Stagger groups and count up figures
+  document.querySelectorAll('.steps li, .faq, .cards').forEach((el, i) => el.style.setProperty('--d', (i % 3) * 0.08 + 's'));
+  function countUp(dt) {
+    const n = +dt.dataset.count, pre = dt.dataset.pre || '', post = dt.dataset.post || '', t0 = performance.now();
+    if (reduce) return;
+    (function step(t) {
+      const k = Math.min(1, (t - t0) / 1100), e = 1 - Math.pow(1 - k, 3);
+      dt.textContent = pre + Math.round(n * e).toLocaleString('en-US') + post;
+      if (k < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+
   const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    if (e.isIntersecting) { e.target.classList.add('in'); e.target.querySelectorAll('[data-count]').forEach(countUp); io.unobserve(e.target); }
   }), { threshold: .12 }) : null;
   document.querySelectorAll('.reveal').forEach(el => io ? io.observe(el) : el.classList.add('in'));
 })();
